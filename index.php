@@ -1,39 +1,55 @@
 <?php
 
-    // L'utilisation de getOffset() n'est pas la solution optimale pour gérer les dates dans les balises <time>.
-    // NB : to filter dates use the setTimeZone(new DateTimeZone('Europe/Paris'));
-
-    $jiris = [
-        ['id' => '1', 'name' => 'Projet web 2024', 'date' => '03-03-2024'],
-        ['id' => '4', 'name' => 'Projet web 2031', 'date' => '01-06-2031'],
-        ['id' => '78', 'name' => 'Projet web 2023', 'date' => '01-01-2023'],
-        ['id' => '98765', 'name' => 'Projet web 2016', 'date' => '01-10-2016'],
-    ];
-
-    foreach ($jiris as &$jiri) {
-        /* Le & devant $jiri -> &$jiri est un opérateur de référence. Il permet de modifier
-        directement l'élément du tableau dans la boucle, au lieu de créer une copie temporaire. */
-        $jiri['date'] = DateTimeImmutable::createFromFormat('d-m-Y', $jiri['date']);
+    function dd($value): void {
+        echo '<pre class="p-8">';
+        var_dump($value);
+        echo '</pre>';
     }
 
-    $upcoming_jiris = [
-        $jiris[0],
-        $jiris[1],
+    $jiris = [
+        ['id' => '6', 'name' => 'Projet web 2022', 'date' => '01-05-2022'],
+        ['id' => '1', 'name' => 'Projet web 2016', 'date' => '01-10-2016'],
+        ['id' => '84', 'name' => 'Projet web 2025', 'date' => '01-06-2025'],
+        ['id' => '987', 'name' => 'Projet web 2028', 'date' => '01-06-2028'],
+        ['id' => '78', 'name' => 'Projet web 2024', 'date' => '05-05-2024'],
+        ['id' => '64', 'name' => 'Projet web 2024', 'date' => '06-02-2024'],
     ];
-    
-    $passed_jiris = [
-        $jiris[2],
-        $jiris[3],
-    ];
+
+    // Tri des jiris par dates
+    usort($jiris, function ($a, $b) {
+        return strtotime($a['date']) <=> strtotime($b['date']);
+    });
+
+    // dd($jiris);
+
+    $passed_jiris = [];
+    $current_jiris = [];
+    $upcoming_jiris = [];
+
+    $now = new DateTimeImmutable();
+
+    /* Le & devant $jiri -> &$jiri est un opérateur de référence. Il permet de modifier
+    directement l'élément du tableau dans la boucle, au lieu de créer une copie temporaire. */
+    foreach ($jiris as &$jiri) {
+        $jiri['date'] = DateTimeImmutable::createFromFormat('d-m-Y', $jiri['date']);
+
+        if ($jiri['date'] > $now) {
+            $upcoming_jiris[] = $jiri;
+        } elseif ($jiri['date'] < $now) {
+            $passed_jiris[] = $jiri;
+        } else {
+            $current_jiris[] = $jiri;
+        }
+    }
 ?>
 <!doctype>
-<html lang="fr">
+<html lang="fr-BE">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Vilain PHP app</title>
+    <title>Vilain PHP - Framework</title>
 </head>
 <body>
     <div class="min-h-full">
@@ -62,7 +78,6 @@
                 </div>
             </div>
         </nav>
-
         <header class="bg-white border-b mx-auto sm:px-6 lg:px-8">
             <h1 class="text-2xl px-4 py-6 font-bold tracking-tight text-gray-900">Jiris</h1>
         </header>
@@ -105,6 +120,42 @@
                     <?php endif ?>
                 </section>
                 <section class="my-6 mt-12">
+                    <h2 class="font-semibold text-xl mb-4">Jiris en cours</h2>
+                    <?php if (count($current_jiris)): ?>
+                        <ol class="flex items-center gap-6">
+                            <?php foreach ($current_jiris as $jiri): ?>
+                                <li>
+                                    <div class="min-w-96 py-6 px-12 pl-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+                                        <h3 class="mb-4 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><?= $jiri['name'] ?></h3>
+                                        <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+                                            <span>Date de commencement&nbsp;:</span>
+                                            <time datetime="<?= $jiri['date']->format('Y-m-d H:i:s'); ?>">
+                                                <?= $jiri['date']->format('j F Y'); ?>
+                                            </time>
+                                        </p>
+                                        <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+                                            <span>Participants&nbsp;:</span>
+                                            <span class="text-gray-500">vide</span>
+                                        </p>
+                                        <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+                                            <span>Projets&nbsp;:</span>
+                                            <span class="text-gray-500">vide</span>
+                                        </p>
+                                        <a href="/jiris/<?= $jiri['id'] ?>" class="inline-flex items-center mt-4 px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            Voir le jiri
+                                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </li>
+                            <?php endforeach ?>
+                        </ol>
+                    <?php else: ?>
+                        <p>Il n'y a pas de jiri en cours à afficher</p>
+                    <?php endif ?>
+                </section>
+                <section class="my-6 mt-12">
                     <h2 class="font-semibold text-xl mb-4">Jiris passés</h2>
                     <?php if (count($passed_jiris)): ?>
                         <ol class="flex items-center gap-6">
@@ -143,11 +194,10 @@
             </div>
         </main>
 
-
         <footer class="mx-auto bg-white p-8 px-12 border-t rounded-lg">
             <div class="w-full flex items-center justify-between">
                 <span class="text-sm text-gray-500 text-center">
-                    © 2024 <a href="https://renaud-vmb.com/" class="hover:underline">RenaudVmb™</a>. Tous droits réservés.
+                    © 2024 <a href="https://renaud-vmb.com" class="hover:underline">RenaudVmb™</a>. Tous droits réservés.
                 </span>
                 <ul class="flex flex-wrap items-center text-sm text-gray-500">
                     <li>
