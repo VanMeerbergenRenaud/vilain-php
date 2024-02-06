@@ -1,10 +1,20 @@
 <?php
+
+    // L'utilisation de getOffset() n'est pas la solution optimale pour gérer les dates dans les balises <time>.
+    // NB : to filter dates use the setTimeZone(new DateTimeZone('Europe/Paris'));
+
     $jiris = [
-        ['id' => '1', 'name' => 'Projet web 2025', 'date' => '',],
-        ['id' => '4', 'name' => 'Projet web 2024', 'date' => '',],
-        ['id' => '78', 'name' => 'Projet web 2023', 'date' => '',],
-        ['id' => '98765', 'name' => 'Projet web 2022', 'date' => '',],
+        ['id' => '1', 'name' => 'Projet web 2024', 'date' => '03-03-2024'],
+        ['id' => '4', 'name' => 'Projet web 2031', 'date' => '01-06-2031'],
+        ['id' => '78', 'name' => 'Projet web 2023', 'date' => '01-03-2023'],
+        ['id' => '98765', 'name' => 'Projet web 2016', 'date' => '01-10-2016'],
     ];
+
+    foreach ($jiris as &$jiri) {
+        /* Le & devant $jiri -> &$jiri est un opérateur de référence. Il permet de modifier
+        directement l'élément du tableau dans la boucle, au lieu de créer une copie temporaire. */
+        $jiri['date'] = DateTimeImmutable::createFromFormat('d-m-Y', $jiri['date']);
+    }
 
     $upcoming_jiris = [
         $jiris[0],
@@ -39,80 +49,91 @@
                             </a>
                         </div>
                         <div class="hidden md:block">
+                            <?php function urlIs($value) {
+                                return $_SERVER['REQUEST_URI'] === $value;
+                            } ?>
                             <div class="ml-10 flex items-baseline space-x-4">
-                                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                                <a href="/jiris" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">
-                                    Jiris
-                                </a>
-                                <a href="/contacts" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
-                                    Projets
-                                </a>
-                                <a href="/projets" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
-                                    Contact
-                                </a>
+                                <a href="/jiris" class="<?= urlIs('/jiris') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Jiris</a>
+                                <a href="/contacts" class="<?= urlIs('/contacts') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projets</a>
+                                <a href="/projets" class="<?= urlIs('/projets') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact</a>
                             </div>
                         </div>
                     </div>
-                    <div class="-mr-2 flex md:hidden">
-                        <!-- Mobile menu button -->
-                        <button type="button" class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" aria-controls="mobile-menu" aria-expanded="false">
-                            <span class="absolute -inset-0.5"></span>
-                            <span class="sr-only">Open main menu</span>
-                            <!-- Menu open: "hidden", Menu closed: "block" -->
-                            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-                            </svg>
-                            <!-- Menu open: "block", Menu closed: "hidden" -->
-                            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobile menu, show/hide based on menu state. -->
-            <div class="md:hidden" id="mobile-menu">
-                <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                    <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                    <a href="/jiris" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">
-                        Jiris
-                    </a>
-                    <a href="/projets" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">
-                        Contacts
-                    </a>
-                    <a href="/contact" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">
-                        Projets
-                    </a>
                 </div>
             </div>
         </nav>
 
-        <header class="bg-white shadow">
-            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900">Jiris</h1>
-            </div>
+        <header class="bg-white border-b mx-auto sm:px-6 lg:px-8">
+            <h1 class="text-2xl px-4 py-6 font-bold tracking-tight text-gray-900">Jiris</h1>
         </header>
         <main>
             <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-                <section class="mb-4">
-                    <h2 class="font-semibold text-xl mb-2">Jiris à venir</h2>
+                <section class="mb-4 mt-2">
+                    <h2 class="font-semibold text-xl mb-4">Jiris à venir</h2>
                     <?php if (count($upcoming_jiris)): ?>
-                        <ol class="flex items-center gap-4">
+                        <ol class="flex items-center gap-6">
                             <?php foreach ($upcoming_jiris as $jiri): ?>
-                                <li><a href="/jiris/<?= $jiri['id'] ?>" class="text-blue-500 underline"><?= $jiri['name'] ?></a></li>
+                                <li>
+                                    <div class="min-w-96 py-6 px-12 pl-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+                                        <h3 class="mb-4 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><?= $jiri['name'] ?></h3>
+                                        <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+                                            <span>Date de commencement&nbsp;:</span>
+                                            <time datetime="<?= $jiri['date']->format('Y-m-d H:i:s'); ?>">
+                                                <?= $jiri['date']->format('j F Y'); ?>
+                                            </time>
+                                        </p>
+                                        <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+                                            <span>Participants&nbsp;:</span>
+                                            <span class="text-gray-500">vide</span>
+                                        </p>
+                                        <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+                                            <span>Projets&nbsp;:</span>
+                                            <span class="text-gray-500">vide</span>
+                                        </p>
+                                        <a href="/jiris/<?= $jiri['id'] ?>" class="inline-flex items-center mt-4 px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            Voir le jiri
+                                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </li>
                             <?php endforeach ?>
                         </ol>
                     <?php else: ?>
                         <p>Il n'y a pas de jiri prochainement à afficher</p>
                     <?php endif ?>
                 </section>
-                <section class="mb-4">
-                    <h2 class="font-semibold text-xl mb-2">Jiris passés</h2>
+                <section class="my-6 mt-12">
+                    <h2 class="font-semibold text-xl mb-4">Jiris passés</h2>
                     <?php if (count($passed_jiris)): ?>
-                        <ol class="flex items-center gap-4">
+                        <ol class="flex items-center gap-6">
                             <?php foreach ($passed_jiris as $jiri): ?>
-                                <li><a href="/jiris/<?= $jiri['id'] ?>" class="text-blue-500 underline"><?= $jiri['name'] ?></a></li>
+                                <li>
+                                    <div class="min-w-96 py-6 px-12 pl-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+                                        <h3 class="mb-4 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><?= $jiri['name'] ?></h3>
+                                        <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+                                            <span>Date de commencement&nbsp;:</span>
+                                            <time datetime="<?= $jiri['date']->format('Y-m-d H:i:s'); ?>">
+                                                <?= $jiri['date']->format('j F Y'); ?>
+                                            </time>
+                                        </p>
+                                        <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+                                            <span>Participants&nbsp;:</span>
+                                            <span class="text-gray-500">vide</span>
+                                        </p>
+                                        <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+                                            <span>Projets&nbsp;:</span>
+                                            <span class="text-gray-500">vide</span>
+                                        </p>
+                                        <a href="/jiris/<?= $jiri['id'] ?>" class="inline-flex items-center mt-4 px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            Voir le jiri
+                                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </li>
                             <?php endforeach ?>
                         </ol>
                     <?php else: ?>
@@ -124,13 +145,3 @@
     </div>
 </body>
 </html>
-
-<!-- Use carbon to display the dates or the class below
-
-$date = DateTimeImmutable::createFromFormat('j-m-Y', '15-Feb-2009);
-
-echo $date->format('Y-m-d')
-
-getOffsest()
-
--->
