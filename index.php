@@ -6,7 +6,7 @@
     $jiris = [
         ['id' => '1', 'name' => 'Projet web 2024', 'date' => '03-03-2024'],
         ['id' => '4', 'name' => 'Projet web 2031', 'date' => '01-06-2031'],
-        ['id' => '78', 'name' => 'Projet web 2023', 'date' => '01-03-2023'],
+        ['id' => '78', 'name' => 'Projet web 2023', 'date' => '01-01-2023'],
         ['id' => '98765', 'name' => 'Projet web 2016', 'date' => '01-10-2016'],
     ];
 
@@ -54,8 +54,8 @@
                             } ?>
                             <div class="ml-10 flex items-baseline space-x-4">
                                 <a href="/jiris" class="<?= urlIs('/jiris') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Jiris</a>
-                                <a href="/contacts" class="<?= urlIs('/contacts') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projets</a>
-                                <a href="/projets" class="<?= urlIs('/projets') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                                <a href="/contacts" class="<?= urlIs('/contacts') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                                <a href="/projets" class="<?= urlIs('/projets') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projet</a>
                             </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
             <h1 class="text-2xl px-4 py-6 font-bold tracking-tight text-gray-900">Jiris</h1>
         </header>
         <main>
-            <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+            <div class="mx-auto px-16 py-6">
                 <section class="mb-4 mt-2">
                     <h2 class="font-semibold text-xl mb-4">Jiris à venir</h2>
                     <?php if (count($upcoming_jiris)): ?>
@@ -142,6 +142,26 @@
                 </section>
             </div>
         </main>
+
+
+        <footer class="mx-auto bg-white p-8 px-12 border-t rounded-lg">
+            <div class="w-full flex items-center justify-between">
+                <span class="text-sm text-gray-500 text-center">
+                    © 2024 <a href="https://renaud-vmb.com/" class="hover:underline">RenaudVmb™</a>. Tous droits réservés.
+                </span>
+                <ul class="flex flex-wrap items-center text-sm text-gray-500">
+                    <li>
+                        <a href="/jiris" class="hover:underline me-8">Jiris</a>
+                    </li>
+                    <li>
+                        <a href="/contacts" class="hover:underline me-8">Contacts</a>
+                    </li>
+                    <li>
+                        <a href="/projets" class="hover:underline me-6">Projets</a>
+                    </li>
+                </ul>
+            </div>
+        </footer>
     </div>
 </body>
 </html>
