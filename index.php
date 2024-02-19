@@ -6,11 +6,15 @@
         echo '</pre>';
     }
 
-    if (file_exists('database/database.php')) {
-        require 'database/database.php';
+    define('ROOT_PATH' , $_SERVER['DOCUMENT_ROOT']);
+
+    if (file_exists(ROOT_PATH . '/Core/Database.php')) {
+        require ROOT_PATH . '/Core/Database.php';
     } else {
         die('Problème de connection avec la db');
     }
+
+
 
     $db = getPDO();
 
