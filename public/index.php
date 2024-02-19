@@ -4,14 +4,20 @@
     require BASE_PATH . '/vendor/autoload.php';
 
     use Core\Database;
+    use Core\Exceptions\FileNotFoundException;
 
     function dd($value): void {
-        echo '<pre class="p-8">';
-        var_dump($value);
-        echo '</pre>';
+            echo '<pre class="p-8">';
+            var_dump($value);
+            echo '</pre>';
+        }
+
+    try {
+        $db = new Database(BASE_PATH . '/.env.local.ini');
+    } catch (FileNotFoundException $e) {
+        die($e->getMessage(''));
     }
 
-    $db = new Database(BASE_PATH . '/.env.local.ini');
 
     $statement = $db->query('SELECT * FROM jiris WHERE starting_at > current_timestamp');
     $upcoming_jiris = $statement->fetchAll();

@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Core\Exceptions\FileNotFoundException;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -12,7 +13,11 @@ class Database
 
     public function __construct(string $ini_path)
     {
-        $this->pdo = $this->getPDO($ini_path);
+        try {
+            $this->pdo = $this->getPDO($ini_path);
+        } catch (FileNotFoundException $e) {
+            die($e->getMessage(''));
+        }
     }
 
     public function dropTables()
@@ -60,7 +65,7 @@ class Database
         if (file_exists($ini_path)) {
             $config = parse_ini_file($ini_path, true);
         } else {
-            die('Error de configuration');
+            throw new FileNotFoundException('Il y a un problème de connection avec la db');
         }
 
         $dsn = sprintf('%s:host=%s;dbname=%s',
