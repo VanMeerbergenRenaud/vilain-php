@@ -1,12 +1,18 @@
 <?php
 
+namespace Core;
+
+use PDO;
+use PDOException;
+use PDOStatement;
+
 class Database
 {
     private PDO $pdo;
 
-    public function __construct()
+    public function __construct(string $ini_path)
     {
-        $this->pdo = $this->getPDO();
+        $this->pdo = $this->getPDO($ini_path);
     }
 
     public function dropTables()
@@ -17,6 +23,11 @@ class Database
         foreach ($tables as $table) {
             $this->pdo->exec('DROP TABLE ' . $table->Tables_in_vilain_php);
         }
+    }
+
+    public function query(string $sql_statement): false|PDOStatement
+    {
+        return $this->pdo->query($sql_statement);
     }
 
     public function createTables()
@@ -44,12 +55,10 @@ class Database
         return $this->pdo->prepare($sql_statement);
     }
 
-    private function getPDO(): PDO
+    private function getPDO(string $ini_path): PDO
     {
-        define('CONFIG_PATH', '.env.local.ini');
-
-        if (file_exists(CONFIG_PATH)) {
-            $config = parse_ini_file(CONFIG_PATH, true);
+        if (file_exists($ini_path)) {
+            $config = parse_ini_file($ini_path, true);
         } else {
             die('Error de configuration');
         }

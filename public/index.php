@@ -1,22 +1,17 @@
 <?php
 
+    const BASE_PATH = __DIR__ . '/..';
+    require BASE_PATH . '/vendor/autoload.php';
+
+    use Core\Database;
+
     function dd($value): void {
         echo '<pre class="p-8">';
         var_dump($value);
         echo '</pre>';
     }
 
-    define('ROOT_PATH' , $_SERVER['DOCUMENT_ROOT']);
-
-    if (file_exists(ROOT_PATH . '/Core/Database.php')) {
-        require ROOT_PATH . '/Core/Database.php';
-    } else {
-        die('Problème de connection avec la db');
-    }
-
-
-
-    $db = getPDO();
+    $db = new Database(BASE_PATH . '/.env.local.ini');
 
     $statement = $db->query('SELECT * FROM jiris WHERE starting_at > current_timestamp');
     $upcoming_jiris = $statement->fetchAll();
