@@ -1,0 +1,15 @@
+{
+    "name": "renau/vilain-php",
+    "autoload": {
+        "psr-4": {
+            "Core\\": "Core"
+        }
+    },
+    "authors": [
+        {
+            "name": "Van Meerbergen Renaud",
+            "email": "113695652+VanMeerbergenRenaud@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}

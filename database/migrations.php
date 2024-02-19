@@ -1,9 +1,12 @@
 <?php
 
-require __DIR__ . '/../Core/Database.php';
+const BASE_PATH = __DIR__ . '/..';
+require BASE_PATH . '/vendor/autoload.php';
+
+use Core\Database;
 
 // Get connection to database
-$db = new Database();
+$db = new Database(BASE_PATH . '/.env.local.ini');
 
 echo 'Dropping tables';
 
@@ -25,7 +28,6 @@ SQL
 );
 
 echo 'Tables created';
-
 
 $jiri_insert_statement = $db->prepare(
     'INSERT INTO jiris (name, starting_at, created_at, updated_at)
@@ -50,7 +52,17 @@ $jiris = [
         'updated_at' => '2024-02-19 14:57:55'
     ], [
         'name' => 'Projet web 2024',
-        'starting_at' => '2024-02-19 14:57:49',
+        'starting_at' => '2024-03-19 14:57:49',
+        'created_at' => '2024-02-19 14:57:54',
+        'updated_at' => '2024-02-19 14:57:55'
+    ], [
+        'name' => 'Projet web 2025',
+        'starting_at' => '2025-03-19 14:57:49',
+        'created_at' => '2024-02-19 14:57:54',
+        'updated_at' => '2024-02-19 14:57:55'
+    ], [
+        'name' => 'Projet web 2026',
+        'starting_at' => '2026-03-19 14:57:49',
         'created_at' => '2024-02-19 14:57:54',
         'updated_at' => '2024-02-19 14:57:55'
     ]
